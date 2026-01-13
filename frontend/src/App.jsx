@@ -6,7 +6,7 @@ function App() {
   // 1. 처음 로딩되면 DB에서 값 가져오기
   useEffect(() => {
     console.log('화면 켜짐');
-    fetch('http://localhost:5000/api/count')
+    fetch('/api/count')
       .then(res => res.json())
       .then(data => {
         console.log('DB에서 받은 값:', data);
@@ -16,7 +16,7 @@ function App() {
 
   // 2. 증가 버튼 함수
   const clickPlus = () => {
-    fetch('http://localhost:5000/api/count', {
+    fetch('/api/count', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ type: 'INC' })
@@ -29,7 +29,7 @@ function App() {
 
   // 3. 감소 버튼 함수
   const clickMinus = () => {
-    fetch('http://localhost:5000/api/count', {
+    fetch('/api/count', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ type: 'DEC' })
