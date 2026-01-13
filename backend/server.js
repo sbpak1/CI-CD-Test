@@ -9,39 +9,57 @@ const port = 5000;
 app.use(cors());
 app.use(express.json());
 
-const db = mysql.createConnection({
+const dbConfig = {
     host: process.env.DB_HOST || 'localhost',
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASS || '1111',
     database: process.env.DB_NAME || 'counter_db'
-});
+};
 
-db.connect((err) => {
-    if (err) {
-        console.error('Database connection failed:', err.message);
-        return;
-    }
-    console.log('>> Connected to MySQL database');
-    
-    const createTableQuery = `
-        CREATE TABLE IF NOT EXISTS counts (
-            id INT PRIMARY KEY,
-            val INT NOT NULL
-        )
-    `;
-    
-    db.query(createTableQuery, (err) => {
+let db;
+
+function handleDisconnect() {
+    db = mysql.createConnection(dbConfig);
+
+    db.connect((err) => {
         if (err) {
-            console.error('!! Table creation failed:', err.message);
+            console.error('>> Database connection failed. Retrying in 5 seconds...', err.message);
+            setTimeout(handleDisconnect, 5000);
+            return;
+        }
+        console.log('>> Connected to MySQL database');
+        
+        const createTableQuery = `
+            CREATE TABLE IF NOT EXISTS counts (
+                id INT PRIMARY KEY,
+                val INT NOT NULL
+            )
+        `;
+        
+        db.query(createTableQuery, (err) => {
+            if (err) {
+                console.error('!! Table creation failed:', err.message);
+            } else {
+                console.log('>> Table "counts" is ready');
+                db.query('INSERT IGNORE INTO counts (id, val) VALUES (1, 0)', (err) => {
+                    if (err) console.error('!! Initial data insert failed:', err.message);
+                    else console.log('>> Initial data checked');
+                });
+            }
+        });
+    });
+
+    db.on('error', (err) => {
+        console.error('>> DB connection error:', err);
+        if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+            handleDisconnect();
         } else {
-            console.log('>> Table "counts" is ready');
-            db.query('INSERT IGNORE INTO counts (id, val) VALUES (1, 0)', (err) => {
-                if (err) console.error('!! Initial data insert failed:', err.message);
-                else console.log('>> Initial data checked');
-            });
+            throw err;
         }
     });
-});
+}
+
+handleDisconnect();
 
 // GET: 현재 카운트 가져오기
 app.get('/api/count', (req, res) => {

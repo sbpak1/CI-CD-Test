@@ -42,8 +42,8 @@ function App() {
 
   const getRandomMessage = (type) => {
     const incMessages = [
-      '나이스! 숫자가 올라갔어요!',
-      '오오, 대단한데요?',
+      '숫자가 올라갔어요!',
+      '가즈아!',
       '더 높이 올라가 볼까요?',
       '좋은 페이스예요!',
       '숫자가 늘어나니 기분이 좋네요!'
@@ -53,7 +53,6 @@ function App() {
       '조금 아쉽네요 ㅠㅠ',
       '다시 올릴 수 있을 거예요!',
       '숫자가 작아지는 중...',
-      '괜찮아요, 다시 시작해봐요!'
     ];
     const list = type === 'INC' ? incMessages : decMessages;
     return list[Math.floor(Math.random() * list.length)];
@@ -67,7 +66,7 @@ function App() {
       </div>
       
       <div className="counter-section">
-        <h1 className="title">AI Smart Counter</h1>
+        <h1 className="title">Smart Counter</h1>
         <div className="count-display">{count}</div>
         
         <div className="button-group">
@@ -75,7 +74,7 @@ function App() {
           <button onClick={clickMinus}>감소 (-)</button>
         </div>
         
-        <p className="footer">Sungbin Project v2.0 - Powered by AI</p>
+        <p className="footer">Sungbin Project v2.0 - Powered by Sungbin</p>
       </div>
     </div>
   );
