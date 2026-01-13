@@ -13,9 +13,6 @@ services:
   # 2. 백엔드 (Node.js)
   backend:
     image: sbpak/sungbin-backend:latest
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
     # ports: - "${BACKEND_PORT}:${BACKEND_PORT}" (Nginx를 통해 접근하므로 외부 노출 불필요)
     depends_on:
       - db
@@ -28,9 +25,6 @@ services:
   # 3. 프론트엔드 (React)
   frontend:
     image: sbpak/sungbin-frontend:latest
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
     # ports: - "${FRONTEND_PORT}:${FRONTEND_PORT}" (Nginx를 통해 접근하므로 외부 노출 불필요)
     stdin_open: true
     depends_on:
