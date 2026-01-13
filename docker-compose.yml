@@ -12,6 +12,7 @@ services:
 
   # 2. 백엔드 (Node.js)
   backend:
+    image: sbpak1/sungbin-backend:latest
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -27,6 +28,7 @@ services:
 
   # 3. 프론트엔드 (React)
   frontend:
+    image: sbpak1/sungbin-frontend:latest
     build:
       context: ./frontend
       dockerfile: Dockerfile
